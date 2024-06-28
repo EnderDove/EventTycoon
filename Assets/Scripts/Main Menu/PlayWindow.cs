@@ -34,15 +34,15 @@ public class PlayWindow : MonoBehaviour
         if (textField.text == "")
             return;
         companyName = textField.text;
-        GameInfo.Save = saveLoadManager.SaveGame(companyName);
-        GameInfo.UseTutorial = useTutorial;
+        GameInfo.Singleton.Save = saveLoadManager.SaveGame(companyName);
+        GameInfo.Singleton.UseTutorial = useTutorial;
         LoadScene();
     }
 
     public void LoadGame(TMP_Text text)
     {
         companyName = text.text;
-        GameInfo.Save = saveLoadManager.LoadGame(companyName);
+        GameInfo.Singleton.Save = saveLoadManager.LoadGame(companyName);
         LoadScene();
     }
 
@@ -61,8 +61,8 @@ public class PlayWindow : MonoBehaviour
         sceneLoading.allowSceneActivation = false;
         translitionAnimator.gameObject.SetActive(true);
         translitionAnimator.Play("Open");
-        GameInfo.CompanyName = companyName;
-        Debug.Log(GameInfo.Save.SaveName);
+        GameInfo.Singleton.CompanyName = companyName;
+        Debug.Log(GameInfo.Singleton.Save.SaveName);
         Invoke(nameof(AllowSceneSwitching), 0.1f);
     }
 
