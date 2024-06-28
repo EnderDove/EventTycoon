@@ -63,9 +63,3 @@ public class SaveLoadManager
         File.Delete(filePath);
     }
 }
-
-[System.Serializable]
-public class Save
-{
-    public string SaveName;
-}
