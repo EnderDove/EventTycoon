@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DayStateManager : MonoBehaviour
@@ -12,7 +11,7 @@ public class DayStateManager : MonoBehaviour
     [HideInInspector] public NoonActivity Noon;
     [HideInInspector] public EveningOutcome Evening;
 
-    public List<Employee> AllPossibleEmployee;
+    public Employee BasicEmployee;
 
     void Start()
     {
@@ -22,7 +21,7 @@ public class DayStateManager : MonoBehaviour
 
         if (GameInfo.Singleton.Save.Day == 1 && GameInfo.Singleton.Save.CurrentState == DayState.Morning)
         {  // if game just started we give player new worker
-            GameInfo.Singleton.Save.Workers[0] = new WorkerData { person = AllPossibleEmployee[0], Expirience = AllPossibleEmployee[0].BasicExperience, isLearning = false, SlotID = 0 };
+            GameInfo.Singleton.Save.Workers[0] = Employee.ToWorkerData(BasicEmployee);
         }
 
         if (GameInfo.Singleton.Save.CurrentState == DayState.Morning)

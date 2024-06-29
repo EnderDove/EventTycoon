@@ -2580,8 +2580,7 @@ MonoBehaviour:
   Morning: {fileID: 0}
   Noon: {fileID: 0}
   Evening: {fileID: 0}
-  AllPossibleEmployee:
-  - {fileID: 11400000, guid: 53fba2dee12b0bc4ea1c7d5bfd9927d2, type: 2}
+  BasicEmployee: {fileID: 11400000, guid: 53fba2dee12b0bc4ea1c7d5bfd9927d2, type: 2}
 --- !u!114 &453980876
 MonoBehaviour:
   m_ObjectHideFlags: 0

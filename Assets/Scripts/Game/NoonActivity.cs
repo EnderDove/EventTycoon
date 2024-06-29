@@ -23,7 +23,7 @@ public class NoonActivity : DayBaseState
     public bool CanOrganize()
     {
         foreach (var worker in GameInfo.Singleton.Save.Workers)
-            if (worker != null && worker.isLearning)
+            if (worker != null && worker.IsLearning)
                 return false;
         return true;
     }
@@ -31,25 +31,25 @@ public class NoonActivity : DayBaseState
     public bool CanWork()
     {
         foreach (var worker in GameInfo.Singleton.Save.Workers)
-            if (worker != null && !worker.isLearning)
+            if (worker != null && !worker.IsLearning)
                 return true;
         return false;
     }
 
     public void GoLearning()
     {
-        GameInfo.Singleton.Save.Workers[selectedWarker.SlotID].isLearning = true;
+        GameInfo.Singleton.Save.Workers[selectedWarker.SlotID].IsLearning = true;
     }
 
     public bool IsLearning(WorkerSlot worker)
     {
         selectedWarker = worker;
-        return GameInfo.Singleton.Save.Workers[worker.SlotID].isLearning;
+        return GameInfo.Singleton.Save.Workers[worker.SlotID].IsLearning;
     }
 
     public void StopLearning()
     {
-        GameInfo.Singleton.Save.Workers[selectedWarker.SlotID].isLearning = false;
+        GameInfo.Singleton.Save.Workers[selectedWarker.SlotID].IsLearning = false;
     }
 
     public void UpdateWorkers()
@@ -59,9 +59,9 @@ public class NoonActivity : DayBaseState
             var worker = GameInfo.Singleton.Save.Workers[i];
             if (worker == null)
                 continue;
-            if (worker.isLearning)
+            if (worker.IsLearning)
             {
-                worker.Expirience += 10; //example
+                worker.CommunicationSkills += 10; //example
             }
         }
     }
