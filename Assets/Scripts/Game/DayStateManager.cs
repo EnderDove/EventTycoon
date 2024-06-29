@@ -1,34 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class DayStateManager : MonoBehaviour
 {
+    private DayBaseState _dayState;
 
-    DayBaseState _dayState = null;
+    public News NewsWindow;
 
-   public MorningEvent _morning = new MorningEvent();
-   public NoonWork _work = new NoonWork();
-   public NoonStudy _study = new NoonStudy();
-   public EveningOutcome _outcome = new EveningOutcome();
+    public MorningEvent Morning = new MorningEvent();
+    public NoonWork Work = new NoonWork();
+    public NoonStudy Study = new NoonStudy();
+    public EveningOutcome Outcome = new EveningOutcome();
 
-    // Start is called before the first frame update
     void Start()
     {
-        _dayState = _morning;
+        _dayState = Morning;
         _dayState.EnterState(this);
     }
 
-    // Update is called once per frame
     void Update()
     {
         _dayState.UpdateState(this);
     }
-   
-   public void SwitchState(DayBaseState day)
+
+    public void NextState()
     {
-        _dayState = day;
-        day.EnterState(this);
+        _dayState.NextState(this);
+    }
+
+    public void SwitchActivity(DayBaseState newActivity)
+    {
+        _dayState = newActivity;
+        _dayState.EnterState(this);
     }
 }

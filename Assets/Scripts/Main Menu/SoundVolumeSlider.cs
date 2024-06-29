@@ -18,6 +18,7 @@ public class SoundVolumeSlider : MonoBehaviour
         slider = GetComponent<Slider>();
         _volumeValue = PlayerPrefs.GetFloat(audioMixerGroup.name, 1);
         slider.value = Mathf.Pow(10f, _volumeValue / volumeMultiplaer);
+        text.text = Mathf.FloorToInt(slider.value * 100).ToString() + "%";
         mixer.SetFloat(audioMixerGroup.name, _volumeValue);
         slider.onValueChanged.AddListener(UpdateVolumeLevel);
     }

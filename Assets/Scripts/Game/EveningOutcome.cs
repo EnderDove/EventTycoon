@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EveningOutcome : DayBaseState
@@ -11,5 +9,9 @@ public class EveningOutcome : DayBaseState
     public override void UpdateState(DayStateManager day)
     {
 
+    }
+    public override void NextState(DayStateManager day)
+    {
+        day.SwitchActivity(day.Morning);
     }
 }
