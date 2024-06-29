@@ -3,10 +3,16 @@ using UnityEngine;
 public class NoonActivity : DayBaseState
 {
     private WorkerSlot selectedWarker;
+    [SerializeField] private EventOrganisationHandler handler;
 
     public override void EnterState(DayStateManager day)
     {
         Debug.Log("Starting " + GameInfo.Singleton.Save.CurrentState);
+        if (GameInfo.Singleton.Save.CurrentEvent != null)
+        {
+            handler.OpenChooseWindow();
+        }
+
     }
     public override void UpdateState(DayStateManager day)
     {
@@ -54,7 +60,7 @@ public class NoonActivity : DayBaseState
 
     public void UpdateWorkers()
     {
-        for (int i = 0; i < GameInfo.Singleton.Save.Workers.Count; i++)
+        for (int i = 0; i < GameInfo.Singleton.Save.Workers.Length; i++)
         {
             var worker = GameInfo.Singleton.Save.Workers[i];
             if (worker == null)

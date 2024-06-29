@@ -13,6 +13,7 @@ public class EveningOutcome : DayBaseState
     public override void NextState(DayStateManager day)
     {
         GameInfo.Singleton.Save.CurrentState = DayState.Morning;
+        GameInfo.Singleton.Save.Day += 1;
         day.SwitchActivity(day.Morning);
     }
 }

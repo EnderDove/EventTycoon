@@ -1,13 +1,11 @@
-using UnityEngine;
-
 public class MorningEvent : DayBaseState
 {
     public override void EnterState(DayStateManager day)
     {
         if (day.NewsWindow.GenerateNews())
-        {
             day.NewsWindow.transform.GetChild(0).gameObject.SetActive(true);
-        }
+        else
+            NextState(day);
     }
     public override void UpdateState(DayStateManager day)
     {

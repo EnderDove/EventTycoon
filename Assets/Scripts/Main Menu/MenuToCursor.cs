@@ -3,6 +3,7 @@ using UnityEngine;
 public class MenuToCursor : MonoBehaviour
 {
     private RectTransform rectTransform;
+    private float scaleCoefficient => 1920f / Screen.width;
 
     private void Awake()
     {
@@ -11,6 +12,6 @@ public class MenuToCursor : MonoBehaviour
 
     private void OnEnable()
     {
-        rectTransform.anchoredPosition = Input.mousePosition;
+        rectTransform.anchoredPosition = Input.mousePosition * scaleCoefficient;
     }
 }

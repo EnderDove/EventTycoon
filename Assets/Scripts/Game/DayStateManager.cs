@@ -5,7 +5,6 @@ public class DayStateManager : MonoBehaviour
     private DayBaseState _dayState;
 
     public News NewsWindow;
-    public bool wantsWork = true;
 
     [HideInInspector] public MorningEvent Morning;
     [HideInInspector] public NoonActivity Noon;
@@ -33,11 +32,6 @@ public class DayStateManager : MonoBehaviour
 
 
         _dayState.EnterState(this);
-    }
-
-    void Update()
-    {
-        _dayState.UpdateState(this);
     }
 
     public void NextState()
