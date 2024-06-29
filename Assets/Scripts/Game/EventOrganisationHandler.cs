@@ -15,6 +15,9 @@ public class EventOrganisationHandler : MonoBehaviour
     [SerializeField] private List<MoneyWaste> MoneyWastes;
     [SerializeField] private TMP_Text MoneySum;
     [SerializeField] private Button AcceptMoneyButton;
+    [SerializeField] private List<Slider> TimeSliders;
+    [SerializeField] private Image LeftParameter;
+    [SerializeField] private Image RightParameter;
     [SerializeField] private Button FinishButton;
 
     [SerializeField] private GameObject LocationWindow;
@@ -24,7 +27,17 @@ public class EventOrganisationHandler : MonoBehaviour
     private string _type = "";
     private string _thereme = "";
 
-    private int stage = 0;
+    public void Start()
+    {
+        foreach (var item in MoneyWastes)
+        {
+            item.GetComponent<Toggle>().onValueChanged.AddListener((bool _) => CheckMoneySpendingSum());
+        }
+        foreach (var item in TimeSliders)
+        {
+            item.onValueChanged.AddListener((float _) => RecalculateSlidersValues());
+        }
+    }
 
     public void CalculateOrbs()
     {
@@ -38,8 +51,7 @@ public class EventOrganisationHandler : MonoBehaviour
 
     public void OpenChooseWindow()
     {
-        Debug.Log(stage);
-        switch (stage)
+        switch (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage)
         {
             case 1: LocationWindow.SetActive(true); break;
             case 2: MoneySpreadWindow.SetActive(true); break;
@@ -74,7 +86,7 @@ public class EventOrganisationHandler : MonoBehaviour
         GameInfo.Singleton.Save.CurrentEvent.Location = location;
         EndChoosing();
     }
-    public void CheckMoneySpendingSum()
+    private void CheckMoneySpendingSum()
     {
         float sum = 0;
         float maxSum = 100;
@@ -102,16 +114,36 @@ public class EventOrganisationHandler : MonoBehaviour
             GameInfo.Singleton.Save.CurrentEvent.MoneySpendedOn[i] = MoneyWastes[i].IsOn;
         EndChoosing();
     }
+    private void RecalculateSlidersValues()
+    {
+        float first = TimeSliders[0].value;
+        float third = TimeSliders[2].value;
+        float sum = first + TimeSliders[1].value + third;
+        LeftParameter.fillAmount = first / sum;
+        RightParameter.fillAmount = third / sum;
+    }
+    public void SpendTime()
+    {
+        float sum = 0;
+        foreach (var t in TimeSliders)
+            sum += t.value;
+        GameInfo.Singleton.Save.CurrentEvent.TimeSpendedOn = new float[TimeSliders.Count];
+        for (int i = 0; i < TimeSliders.Count; i++)
+        {
+            GameInfo.Singleton.Save.CurrentEvent.TimeSpendedOn[i] = TimeSliders[i].value / sum;
+        }
+        EndChoosing();
+    }
     private void EndChoosing()
     {
-        stage += 1;
-        ProgressBar.fillAmount = stage / 4f;
+        GameInfo.Singleton.Save.CurrentEvent.DevelopingStage += 1;
+        ProgressBar.fillAmount = GameInfo.Singleton.Save.CurrentEvent.DevelopingStage / 4f;
     }
     public void Finish()
     {
-        GameInfo.Singleton.Save.EventStory.Add(GameInfo.Singleton.Save.CurrentEvent);
+        GameInfo.Singleton.Save.EventHitory.Add(GameInfo.Singleton.Save.CurrentEvent);
         GameInfo.Singleton.Save.CurrentEvent = null;
-        stage = 0;
+        GameInfo.Singleton.Save.CurrentEvent.DevelopingStage = 0;
     }
 }
 
@@ -124,6 +156,7 @@ public class Event
     public string Location = "";
     public bool[] MoneySpendedOn;
     public float[] TimeSpendedOn;
+    public int DevelopingStage = 0;
     public float FinalMultiplayer = 1f;
 
     public int CurrentAppearence = 0;
