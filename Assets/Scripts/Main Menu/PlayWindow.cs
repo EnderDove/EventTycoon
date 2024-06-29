@@ -1,23 +1,24 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(SceneChanger))]
 public class PlayWindow : MonoBehaviour
 {
     private readonly SaveLoadManager saveLoadManager = new();
-    private AsyncOperation sceneLoading;
     private string companyName;
-    public bool useTutorial { get; private set; }
+    private bool useTutorial;
+    private SceneChanger sceneChanger;
 
     [SerializeField] private Image checkmark;
-    [SerializeField] private Animator translitionAnimator;
     [SerializeField] private TMP_InputField textField;
     [SerializeField] private List<GameObject> oldGames;
 
     private void Start()
     {
+        sceneChanger = GetComponent<SceneChanger>();
+
         checkmark.color = Color.green;
         useTutorial = true;
 
@@ -35,16 +36,17 @@ public class PlayWindow : MonoBehaviour
             return;
         companyName = textField.text;
         GameInfo.Singleton.Save = new() { SaveName = companyName };
-        saveLoadManager.SaveGame(GameInfo.Singleton.Save);
         GameInfo.Singleton.UseTutorial = useTutorial;
-        LoadScene();
+        GameInfo.Singleton.Save.SaveName = companyName;
+        saveLoadManager.SaveGame(GameInfo.Singleton.Save);
+        sceneChanger.LoadScene("Game");
     }
 
     public void LoadGame(TMP_Text text)
     {
         companyName = text.text;
         GameInfo.Singleton.Save = saveLoadManager.LoadGame(companyName);
-        LoadScene();
+        sceneChanger.LoadScene("Game");
     }
 
     public void SwitchTutorialUse()
@@ -56,21 +58,7 @@ public class PlayWindow : MonoBehaviour
             checkmark.color = Color.gray;
     }
 
-    private void LoadScene()
-    {
-        sceneLoading = SceneManager.LoadSceneAsync("Game");
-        sceneLoading.allowSceneActivation = false;
-        translitionAnimator.gameObject.SetActive(true);
-        translitionAnimator.Play("Open");
-        GameInfo.Singleton.Save.SaveName = companyName;
-        Debug.Log(GameInfo.Singleton.Save.SaveName);
-        Invoke(nameof(AllowSceneSwitching), 0.1f);
-    }
 
-    public void AllowSceneSwitching()
-    {
-        sceneLoading.allowSceneActivation = true;
-    }
 
     public void DeleteGame(TMP_Text text)
     {

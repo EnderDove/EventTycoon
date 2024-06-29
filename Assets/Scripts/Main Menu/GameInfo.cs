@@ -34,7 +34,10 @@ public class GameInfo : MonoBehaviour
     private void Awake()
     {
         if (singleton != null)
+        {
             Destroy(gameObject);
+            return;
+        }
         singleton = this;
         DontDestroyOnLoad(gameObject);
     }

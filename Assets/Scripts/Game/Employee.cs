@@ -3,6 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Employee", menuName = "Employee", order = 0)]
 public class Employee : ScriptableObject
 {
+    public int EmployeeID;
+
     public string Name;
     public Sprite ProfilePicture;
     public Sprite SpriteLD;
@@ -16,6 +18,6 @@ public class Employee : ScriptableObject
 
     public static WorkerData ToWorkerData(Employee employee)
     {
-        return new WorkerData() { Person = employee, CommunicationSkills = employee.BasicCommunicationSkills, DisignSkills = employee.BasicDisignSkills, Speed = employee.BasicSpeed };
+        return new WorkerData() { EmployeeIDRef = employee.EmployeeID, CommunicationSkills = employee.BasicCommunicationSkills, DisignSkills = employee.BasicDisignSkills, Speed = employee.BasicSpeed };
     }
 }

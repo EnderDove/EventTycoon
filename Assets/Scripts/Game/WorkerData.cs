@@ -1,7 +1,7 @@
 [System.Serializable]
 public class WorkerData
 {
-    public Employee Person;
+    public int EmployeeIDRef;
     public bool IsLearning;
     public float DisignSkills;
     public float Speed;
