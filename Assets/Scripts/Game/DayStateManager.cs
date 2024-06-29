@@ -5,6 +5,7 @@ public class DayStateManager : MonoBehaviour
     private DayBaseState _dayState;
 
     public News NewsWindow;
+    public bool wantsWork = true;
 
     public MorningEvent Morning = new MorningEvent();
     public NoonWork Work = new NoonWork();
