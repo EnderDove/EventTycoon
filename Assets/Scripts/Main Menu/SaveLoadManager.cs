@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SaveLoadManager
 {
-    public Save SaveGame(string saveName)
+    public void SaveGame(Save save)
     {
-        string filePath = Application.persistentDataPath + "/saves/" + saveName + ".gamesave";
+        string filePath = Application.persistentDataPath + "/saves/" + save.SaveName + ".gamesave";
 
         var formatter = new BinaryFormatter();
         FileStream file;
@@ -15,13 +15,8 @@ public class SaveLoadManager
         else
             file = new FileStream(filePath, FileMode.Open);
 
-        var save = new Save
-        {
-            SaveName = saveName
-        };
         formatter.Serialize(file, save);
         file.Close();
-        return save;
     }
 
     public string[] GetSaves()

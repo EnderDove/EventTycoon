@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DayStateManager : MonoBehaviour
@@ -7,14 +8,31 @@ public class DayStateManager : MonoBehaviour
     public News NewsWindow;
     public bool wantsWork = true;
 
-    public MorningEvent Morning = new MorningEvent();
-    public NoonWork Work = new NoonWork();
-    public NoonStudy Study = new NoonStudy();
-    public EveningOutcome Outcome = new EveningOutcome();
+    [HideInInspector] public MorningEvent Morning;
+    [HideInInspector] public NoonActivity Noon;
+    [HideInInspector] public EveningOutcome Evening;
+
+    public List<Employee> AllPossibleEmployee;
 
     void Start()
     {
-        _dayState = Morning;
+        Morning = GetComponent<MorningEvent>();
+        Noon = GetComponent<NoonActivity>();
+        Evening = GetComponent<EveningOutcome>();
+
+        if (GameInfo.Singleton.Save.Day == 1 && GameInfo.Singleton.Save.CurrentState == DayState.Morning)
+        {  // if game just started we give player new worker
+            GameInfo.Singleton.Save.Workers[0] = new WorkerData { person = AllPossibleEmployee[0], Expirience = AllPossibleEmployee[0].BasicExperience, isLearning = false, SlotID = 0 };
+        }
+
+        if (GameInfo.Singleton.Save.CurrentState == DayState.Morning)
+            _dayState = Morning;
+        else if (GameInfo.Singleton.Save.CurrentState == DayState.Noon)
+            _dayState = Noon;
+        else
+            _dayState = Evening;
+
+
         _dayState.EnterState(this);
     }
 
@@ -26,6 +44,7 @@ public class DayStateManager : MonoBehaviour
     public void NextState()
     {
         _dayState.NextState(this);
+        print(GameInfo.Singleton.Save.CurrentState);
     }
 
     public void SwitchActivity(DayBaseState newActivity)

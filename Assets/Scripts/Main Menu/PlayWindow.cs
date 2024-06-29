@@ -34,7 +34,8 @@ public class PlayWindow : MonoBehaviour
         if (textField.text == "")
             return;
         companyName = textField.text;
-        GameInfo.Singleton.Save = saveLoadManager.SaveGame(companyName);
+        GameInfo.Singleton.Save = new() { SaveName = companyName };
+        saveLoadManager.SaveGame(GameInfo.Singleton.Save);
         GameInfo.Singleton.UseTutorial = useTutorial;
         LoadScene();
     }

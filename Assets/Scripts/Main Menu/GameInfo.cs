@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class GameInfo : MonoBehaviour
 {
@@ -53,12 +55,13 @@ public class Save
     public int DesignSkill = 0;
     public int Speed = 0;
     public int Social = 0;
+    public List<WorkerData> Workers = new WorkerData[12].ToList();
+
 }
 
 public enum DayState
 {
     Morning = 0,
-    Work = 1,
-    Study = 2,
-    Evening = 3,
+    Noon = 1,
+    Evening = 2,
 }
