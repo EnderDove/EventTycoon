@@ -61,7 +61,7 @@ public class PlayWindow : MonoBehaviour
         sceneLoading.allowSceneActivation = false;
         translitionAnimator.gameObject.SetActive(true);
         translitionAnimator.Play("Open");
-        GameInfo.Singleton.CompanyName = companyName;
+        GameInfo.Singleton.Save.SaveName = companyName;
         Debug.Log(GameInfo.Singleton.Save.SaveName);
         Invoke(nameof(AllowSceneSwitching), 0.1f);
     }

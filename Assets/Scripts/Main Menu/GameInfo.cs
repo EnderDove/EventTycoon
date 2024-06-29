@@ -14,9 +14,20 @@ public class GameInfo : MonoBehaviour
     private static GameInfo singleton;
 
     // name only affects the name of a save file
-    public string CompanyName { get; set; }
     public bool UseTutorial { get; set; } = false;
-    public Save Save { get; set; }
+    public Save Save
+    {
+        get
+        {
+            save ??= new();
+            return save;
+        }
+        set
+        {
+            save = value;
+        }
+    }
+    private Save save;
 
     private void Awake()
     {
