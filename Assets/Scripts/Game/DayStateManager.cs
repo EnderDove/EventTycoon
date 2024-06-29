@@ -4,6 +4,8 @@ public class DayStateManager : MonoBehaviour
 {
     private DayBaseState _dayState;
 
+    public News NewsWindow;
+
     public MorningEvent Morning = new MorningEvent();
     public NoonWork Work = new NoonWork();
     public NoonStudy Study = new NoonStudy();
