@@ -1,11 +1,17 @@
-﻿using JetBrains.Annotations;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameInfo : MonoBehaviour
 {
-    private GameStats _gameStats { get; set; }
-    
-    public static GameInfo Singleton { get; private set; }
+    public static GameInfo Singleton
+    {
+        get
+        {
+            if (singleton == null)
+                Debug.LogWarning("Game Info not created yet, pls start game from main menu scene");
+            return singleton;
+        }
+    }
+    private static GameInfo singleton;
 
     // name only affects the name of a save file
     public string CompanyName { get; set; }
@@ -14,9 +20,9 @@ public class GameInfo : MonoBehaviour
 
     private void Awake()
     {
-        if (Singleton != null)
+        if (singleton != null)
             Destroy(gameObject);
-        Singleton = this;
+        singleton = this;
         DontDestroyOnLoad(gameObject);
     }
 }
@@ -26,18 +32,22 @@ public class GameInfo : MonoBehaviour
 // туториал можно пройти при первом создании сейва (если выйти из игры во
 // время туториала, то при перезаходе его не будет)
 [System.Serializable]
-public class GameStats
+public class Save
 {
+    public string SaveName = "Default Company";
     public int Day = 1;
+    public DayState CurrentState = DayState.Morning;
     public int Followers = 0;
-    public int Money = 0;
+    public int Money = 10000;
     public int DesignSkill = 0;
     public int Speed = 0;
     public int Social = 0;
 }
 
-[System.Serializable]
-public class Save
+public enum DayState
 {
-    public string SaveName = "blank";
+    Morning = 0,
+    Work = 1,
+    Study = 2,
+    Evening = 3,
 }
