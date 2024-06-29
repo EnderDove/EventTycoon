@@ -23,7 +23,7 @@ public class NoonActivity : DayBaseState
     public bool CanOrganize()
     {
         foreach (var worker in GameInfo.Singleton.Save.Workers)
-            if (worker.isLearning)
+            if (worker != null && worker.isLearning)
                 return false;
         return true;
     }
@@ -31,7 +31,7 @@ public class NoonActivity : DayBaseState
     public bool CanWork()
     {
         foreach (var worker in GameInfo.Singleton.Save.Workers)
-            if (!worker.isLearning)
+            if (worker != null && !worker.isLearning)
                 return true;
         return false;
     }

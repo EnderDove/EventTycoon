@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 6357034}
   - component: {fileID: 6357035}
   - component: {fileID: 6357036}
+  - component: {fileID: 6357037}
   m_Layer: 5
   m_Name: Parent
   m_TagString: Untagged
@@ -210,6 +211,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f631dab15eca8b43a2283c1234e46f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6357037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6357032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 625853c44d0e89940a72577bddbc4ed7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  noonActivity: {fileID: 453980877}
+  organize: {fileID: 1762625668}
+  work: {fileID: 1548806683}
 --- !u!1 &11942193
 GameObject:
   m_ObjectHideFlags: 0
@@ -11197,6 +11213,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: Close
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 367562096}
+        m_TargetAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!224 &6555954782273359942
