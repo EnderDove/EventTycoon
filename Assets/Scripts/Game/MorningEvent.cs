@@ -7,10 +7,7 @@ public class MorningEvent : DayBaseState
         else
             NextState(day);
     }
-    public override void UpdateState(DayStateManager day)
-    {
 
-    }
     public override void NextState(DayStateManager day)
     {
         GameInfo.Singleton.Save.CurrentState = DayState.Noon;

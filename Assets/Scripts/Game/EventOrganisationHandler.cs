@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class EventOrganisationHandler : MonoBehaviour
 {
+    private GameManager manager;
+
     [SerializeField] private TMP_Text Appearence;
     [SerializeField] private TMP_Text Mistakes;
     [SerializeField] private TMP_Text Technology;
@@ -33,6 +35,7 @@ public class EventOrganisationHandler : MonoBehaviour
 
     public void Start()
     {
+        manager = GetComponent<GameManager>();
         foreach (var item in MoneyWastes)
         {
             item.GetComponent<Toggle>().onValueChanged.AddListener((bool _) => CheckMoneySpendingSum());
@@ -134,15 +137,6 @@ public class EventOrganisationHandler : MonoBehaviour
         EndChoosing();
     }
 
-    enum OrbType
-    {
-        Appearence = 1,
-        Mistakes,
-        Technology,
-        Confidence
-    }
-
-    // change method name to "animate bar"
     private void EndChoosing()
     {
         StartCoroutine(FillProgress());
@@ -158,6 +152,12 @@ public class EventOrganisationHandler : MonoBehaviour
 
     private IEnumerator GenerateOrbs(int type1, int type2, int type3, int type4)
     {
+        List<WorkerSlot> availableWorkers = new();
+        for (int i = 0; i < GameInfo.Singleton.Save.Workers.Length; i++)
+            if (GameInfo.Singleton.Save.Workers[i] != null)
+                availableWorkers.Add(manager.WorkerSlots[i]);
+        var availableWorkersCount = availableWorkers.Count;
+
         int orbCnt = type1 + type2 + type3 + type4;
         // here we create all the orbs in random times between begin and end of filling
         var timeToType = new SortedDictionary<float, OrbType>();
@@ -177,7 +177,8 @@ public class EventOrganisationHandler : MonoBehaviour
         {
             yield return new WaitForSeconds(entry.Key - prevOrbTime);
             prevOrbTime = entry.Key;
-            Debug.Log($"spawned new orb by type {entry.Value}");
+            var slot = availableWorkers[Random.Range(0, availableWorkersCount)];
+            slot.CreateOrb(entry.Value);
             // instantiate orb and increase corresponding stat if it is not a type = 5
         }
     }
@@ -202,8 +203,15 @@ public class EventOrganisationHandler : MonoBehaviour
     {
         GameInfo.Singleton.Save.EventHitory.Add(GameInfo.Singleton.Save.CurrentEvent);
         GameInfo.Singleton.Save.CurrentEvent = null;
-        GameInfo.Singleton.Save.CurrentEvent.DevelopingStage = 0;
     }
+}
+
+public enum OrbType
+{
+    Appearence = 1,
+    Mistakes,
+    Technology,
+    Confidence
 }
 
 [System.Serializable]

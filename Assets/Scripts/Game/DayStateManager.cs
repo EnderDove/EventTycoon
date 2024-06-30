@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class DayStateManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class DayStateManager : MonoBehaviour
 
     [HideInInspector] public MorningEvent Morning;
     [HideInInspector] public NoonActivity Noon;
+    [SerializeField] private TMP_Text currentDay;
 
     public Employee BasicEmployee;
 
@@ -20,6 +22,7 @@ public class DayStateManager : MonoBehaviour
         if (GameInfo.Singleton.Save.Day == 1 && GameInfo.Singleton.Save.CurrentState == DayState.Morning)
         {  // if game just started we give player new worker
             GameInfo.Singleton.Save.Workers[0] = Employee.ToWorkerData(BasicEmployee);
+            GameInfo.Singleton.Save.Workers[1] = Employee.ToWorkerData(BasicEmployee);
         }
 
         if (GameInfo.Singleton.Save.CurrentState == DayState.Morning)
@@ -34,6 +37,7 @@ public class DayStateManager : MonoBehaviour
     public void NextState()
     {
         _dayState.NextState(this);
+        currentDay.text = $"{GameInfo.Singleton.Save.Day} День";
     }
 
     public void SwitchActivity(DayBaseState newActivity)

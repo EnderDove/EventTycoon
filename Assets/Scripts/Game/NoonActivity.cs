@@ -14,16 +14,16 @@ public class NoonActivity : DayBaseState
         }
 
     }
-    public override void UpdateState(DayStateManager day)
-    {
 
-    }
     public override void NextState(DayStateManager day)
     {
         Debug.Log("Ending Day");
-        GameInfo.Singleton.Save.CurrentState = DayState.Evening;
+        GameInfo.Singleton.Save.CurrentState = DayState.Morning;
         GameInfo.Singleton.Save.Day += 1;
-        handler.FinishGainingOrbs();
+        if (GameInfo.Singleton.Save.CurrentEvent != null)
+        {
+            handler.FinishGainingOrbs();
+        }
         UpdateWorkers();
         day.SwitchActivity(day.Morning);
     }
@@ -52,6 +52,8 @@ public class NoonActivity : DayBaseState
     public bool IsLearning(WorkerSlot worker)
     {
         selectedWarker = worker;
+        if (GameInfo.Singleton.Save.Workers[worker.SlotID] == null)
+            return false;
         return GameInfo.Singleton.Save.Workers[worker.SlotID].IsLearning;
     }
 

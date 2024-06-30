@@ -63,5 +63,4 @@ public enum DayState
 {
     Morning = 0,
     Noon = 1,
-    Evening = 2,
 }
