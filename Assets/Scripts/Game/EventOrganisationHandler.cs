@@ -43,11 +43,6 @@ public class EventOrganisationHandler : MonoBehaviour
         }
     }
 
-    public void CalculateOrbs()
-    {
-
-    }
-
     public void AllowFinish()
     {
         FinishButton.gameObject.SetActive(true);
@@ -150,11 +145,15 @@ public class EventOrganisationHandler : MonoBehaviour
     // change method name to "animate bar"
     private void EndChoosing()
     {
-        
-        //ProgressBar.fillAmount = GameInfo.Singleton.Save.CurrentEvent.DevelopingStage / 4f;
-
-        StartCoroutine(FillProgress(ProgressBar));
+        StartCoroutine(FillProgress());
         StartCoroutine(GenerateOrbs(2, 3, 4, 5));
+    }
+
+    public void FinishGainingOrbs()
+    {
+        StopAllCoroutines();
+        GameInfo.Singleton.Save.CurrentEvent.DevelopingStage += 1;
+        ProgressBar.fillAmount = GameInfo.Singleton.Save.CurrentEvent.DevelopingStage / 5f;
     }
 
     private IEnumerator GenerateOrbs(int type1, int type2, int type3, int type4)
@@ -164,17 +163,18 @@ public class EventOrganisationHandler : MonoBehaviour
         var timeToType = new SortedDictionary<float, OrbType>();
         //timeToType.Add(0, (OrbType)5); // fictionary record to help processing real ones
 
-        for (int i = 0;i<orbCnt;++i)
+        for (int i = 0; i < orbCnt; ++i)
         {
             if (i < type1) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)1);
-            else if (i < type1+type2) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)2);
-            else if (i < orbCnt-type4) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)3);
+            else if (i < type1 + type2) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)2);
+            else if (i < orbCnt - type4) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)3);
             else if (i < orbCnt) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)4);
-            
+
         }
         float prevOrbTime = 0;
         // here we spawn orbs and wait between different spawns
-        foreach (var entry in timeToType) {
+        foreach (var entry in timeToType)
+        {
             yield return new WaitForSeconds(entry.Key - prevOrbTime);
             prevOrbTime = entry.Key;
             Debug.Log($"spawned new orb by type {entry.Value}");
@@ -182,22 +182,19 @@ public class EventOrganisationHandler : MonoBehaviour
         }
     }
 
-    
-
-    private IEnumerator FillProgress(Image bar)
+    private IEnumerator FillProgress()
     {
         // when stopping event we should deactivate bar?
-        if (bar == null) yield break;
+        if (ProgressBar == null) yield break;
 
         // what to do when bar is filled??
         float timeSpend = 0;
-        while (timeSpend <= BarFillDurationSec) {
-            bar.fillAmount = timeSpend/BarFillDurationSec;
-            GameInfo.Singleton.Save.CurrentEvent.DevelopingStage = timeSpend / BarFillDurationSec;
+        while (timeSpend <= BarFillDurationSec)
+        {
+            ProgressBar.fillAmount = (timeSpend / BarFillDurationSec + GameInfo.Singleton.Save.CurrentEvent.DevelopingStage) / 5f;
             timeSpend += Time.deltaTime;
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
-
     }
 
 
@@ -218,8 +215,7 @@ public class Event
     public string Location = "";
     public bool[] MoneySpendedOn;
     public float[] TimeSpendedOn;
-    // value of stage from 0 to 1
-    public float DevelopingStage = 0f;
+    public int DevelopingStage = 0;
     public float FinalMultiplayer = 1f;
 
     public int CurrentAppearence = 0;

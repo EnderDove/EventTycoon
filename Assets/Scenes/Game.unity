@@ -4631,9 +4631,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 453980875}
-        m_TargetAssemblyTypeName: DayStateManager, Assembly-CSharp
-        m_MethodName: NextState
+      - m_Target: {fileID: 453980873}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: ClickOnAction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4839,7 +4839,6 @@ GameObject:
   - component: {fileID: 453980875}
   - component: {fileID: 453980878}
   - component: {fileID: 453980877}
-  - component: {fileID: 453980876}
   - component: {fileID: 453980879}
   - component: {fileID: 453980880}
   m_Layer: 0
@@ -4892,18 +4891,6 @@ MonoBehaviour:
   Morning: {fileID: 0}
   Noon: {fileID: 0}
   BasicEmployee: {fileID: 11400000, guid: 53fba2dee12b0bc4ea1c7d5bfd9927d2, type: 2}
---- !u!114 &453980876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 453980872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01facdd52f5877744b8a76d453e261f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &453980877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4959,7 +4946,7 @@ MonoBehaviour:
   Technology: {fileID: 895463457}
   Confidence: {fileID: 980037062}
   ProgressBar: {fileID: 993754830}
-  BarFillDurationSec: 3
+  BarFillDurationSec: 15
   NameField: {fileID: 367562096}
   MoneyWastes:
   - {fileID: 1107683614}
@@ -18748,7 +18735,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 105.44006, y: 99.51001}
+  m_AnchoredPosition: {x: 105.43994, y: 99.51001}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2064726450

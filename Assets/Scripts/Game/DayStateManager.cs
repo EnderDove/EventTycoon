@@ -15,7 +15,7 @@ public class DayStateManager : MonoBehaviour
     {
         Morning = GetComponent<MorningEvent>();
         Noon = GetComponent<NoonActivity>();
-        
+
 
         if (GameInfo.Singleton.Save.Day == 1 && GameInfo.Singleton.Save.CurrentState == DayState.Morning)
         {  // if game just started we give player new worker
@@ -34,7 +34,6 @@ public class DayStateManager : MonoBehaviour
     public void NextState()
     {
         _dayState.NextState(this);
-        print(GameInfo.Singleton.Save.CurrentState);
     }
 
     public void SwitchActivity(DayBaseState newActivity)
