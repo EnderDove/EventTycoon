@@ -44,11 +44,17 @@ public class GameManager : MonoBehaviour
         Time.timeScale = timeScale;
     }
 
-    public void SaveAndQuit()
+    public void Save()
     {
         saveLoadManager.SaveGame(GameInfo.Singleton.Save);
+    }
+
+    public void Quit()
+    {
+        SetTimeScale(1);
         if (GameInfo.Singleton.Save.CurrentEvent != null)
             handler.FinishGainingOrbs();
+        Save();
         sceneChanger.LoadScene("Main Menu");
     }
 }

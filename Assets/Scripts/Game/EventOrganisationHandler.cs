@@ -15,7 +15,7 @@ public class EventOrganisationHandler : MonoBehaviour
 
     [SerializeField] private Image ProgressBar;
     [SerializeField] private float BarFillDurationSec = 15;
-    //private float BarFillSpeed = 
+    [SerializeField] private GameObject score;
 
     [SerializeField] private TMP_InputField NameField;
     [SerializeField] private List<MoneyWaste> MoneyWastes;
@@ -44,6 +44,11 @@ public class EventOrganisationHandler : MonoBehaviour
         {
             item.onValueChanged.AddListener((float _) => RecalculateSlidersValues());
         }
+        if (GameInfo.Singleton.Save.CurrentEvent != null)
+        {
+            score.SetActive(true);
+            SyncPoints();
+        }
     }
 
     public void AllowFinish()
@@ -68,7 +73,16 @@ public class EventOrganisationHandler : MonoBehaviour
         //Calculate Multip.
 
         GameInfo.Singleton.Save.CurrentEvent = new Event() { Name = NameField.text, Type = _type, Threme = _thereme };
-        EndChoosing();
+        FinishButton.gameObject.SetActive(false);
+        SyncPoints();
+        EndChoosing(Random.Range(1, 2), Random.Range(3, 6), Random.Range(3, 6), Random.Range(3, 6));
+    }
+    private void SyncPoints()
+    {
+        Mistakes.text = GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes.ToString();
+        Appearence.text = GameInfo.Singleton.Save.CurrentEvent.CurrentAppearence.ToString();
+        Confidence.text = GameInfo.Singleton.Save.CurrentEvent.CurrentConfidence.ToString();
+        Technology.text = GameInfo.Singleton.Save.CurrentEvent.CurrentTechnology.ToString();
     }
     public void SetThreme(string threme)
     {
@@ -87,7 +101,8 @@ public class EventOrganisationHandler : MonoBehaviour
         //Calculate Multip.
 
         GameInfo.Singleton.Save.CurrentEvent.Location = location;
-        EndChoosing();
+        EndChoosing(Random.Range(1, 2), Random.Range(3, 6), Random.Range(3, 6), Random.Range(3, 6));
+
     }
     private void CheckMoneySpendingSum()
     {
@@ -115,7 +130,7 @@ public class EventOrganisationHandler : MonoBehaviour
         GameInfo.Singleton.Save.CurrentEvent.MoneySpendedOn = new bool[MoneyWastes.Count];
         for (int i = 0; i < MoneyWastes.Count; i++)
             GameInfo.Singleton.Save.CurrentEvent.MoneySpendedOn[i] = MoneyWastes[i].IsOn;
-        EndChoosing();
+        EndChoosing(Random.Range(1, 2), Random.Range(3, 6), Random.Range(3, 6), Random.Range(3, 6));
     }
     private void RecalculateSlidersValues()
     {
@@ -135,13 +150,14 @@ public class EventOrganisationHandler : MonoBehaviour
         {
             GameInfo.Singleton.Save.CurrentEvent.TimeSpendedOn[i] = TimeSliders[i].value / sum;
         }
-        EndChoosing();
+        EndChoosing(Random.Range(1, 2), Random.Range(3, 6), Random.Range(3, 6), Random.Range(3, 6));
+
     }
 
-    private void EndChoosing()
+    private void EndChoosing(int mistakes, int appearence, int confidence, int technology)
     {
         StartCoroutine(FillProgress());
-        StartCoroutine(GenerateOrbs(2, 3, 4, 5));
+        StartCoroutine(GenerateOrbs(mistakes, appearence, confidence, technology));
     }
 
     private void StartCriticalManagement()
@@ -191,20 +207,19 @@ public class EventOrganisationHandler : MonoBehaviour
                     if (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage == 4)
                     {
                         GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes -= 1;
-                        Mistakes.text = GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes.ToString();
                         if (GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes == 0)
                             FinishGainingOrbs();
                     }
                     else
                     {
                         GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes += 1;
-                        Mistakes.text = GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes.ToString();
                     }
                     break;
-                case OrbType.Appearence: GameInfo.Singleton.Save.CurrentEvent.CurrentAppearence += 1; Appearence.text = GameInfo.Singleton.Save.CurrentEvent.CurrentAppearence.ToString(); break;
-                case OrbType.Confidence: GameInfo.Singleton.Save.CurrentEvent.CurrentConfidence += 1; Confidence.text = GameInfo.Singleton.Save.CurrentEvent.CurrentConfidence.ToString(); break;
-                case OrbType.Technology: GameInfo.Singleton.Save.CurrentEvent.CurrentTechnology += 1; Technology.text = GameInfo.Singleton.Save.CurrentEvent.CurrentTechnology.ToString(); break;
+                case OrbType.Appearence: GameInfo.Singleton.Save.CurrentEvent.CurrentAppearence += 1; break;
+                case OrbType.Confidence: GameInfo.Singleton.Save.CurrentEvent.CurrentConfidence += 1; break;
+                case OrbType.Technology: GameInfo.Singleton.Save.CurrentEvent.CurrentTechnology += 1; break;
             }
+            SyncPoints();
             // instantiate orb and increase corresponding stat if it is not a type = 5
         }
     }

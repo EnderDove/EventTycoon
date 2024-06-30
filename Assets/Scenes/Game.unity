@@ -730,6 +730,7 @@ MonoBehaviour:
   Confidence: {fileID: 0}
   ProgressBar: {fileID: 0}
   BarFillDurationSec: 15
+  score: {fileID: 0}
   NameField: {fileID: 0}
   MoneyWastes: []
   MoneySum: {fileID: 0}
@@ -5254,6 +5255,7 @@ MonoBehaviour:
   Confidence: {fileID: 980037062}
   ProgressBar: {fileID: 993754830}
   BarFillDurationSec: 15
+  score: {fileID: 1064379027}
   NameField: {fileID: 367562096}
   MoneyWastes:
   - {fileID: 1107683614}
@@ -8046,7 +8048,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 453980873}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SaveAndQuit
+        m_MethodName: Quit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

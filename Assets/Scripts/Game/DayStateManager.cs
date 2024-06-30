@@ -4,7 +4,7 @@ using UnityEngine;
 public class DayStateManager : MonoBehaviour
 {
     private DayBaseState _dayState;
-
+    public GameManager gameManager { get; private set; }
     public News NewsWindow;
 
     [HideInInspector] public MorningEvent Morning;
@@ -17,7 +17,7 @@ public class DayStateManager : MonoBehaviour
     {
         Morning = GetComponent<MorningEvent>();
         Noon = GetComponent<NoonActivity>();
-
+        gameManager = GetComponent<GameManager>();
 
         if (GameInfo.Singleton.Save.Day == 1 && GameInfo.Singleton.Save.CurrentState == DayState.Morning)
         {  // if game just started we give player new worker

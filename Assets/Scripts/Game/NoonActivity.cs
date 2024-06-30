@@ -25,6 +25,7 @@ public class NoonActivity : DayBaseState
             handler.FinishGainingOrbs();
         }
         UpdateWorkers();
+        day.gameManager.Save();
         day.SwitchActivity(day.Morning);
     }
 
