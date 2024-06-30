@@ -12,6 +12,7 @@ public class WorkerSlot : MonoBehaviour
 
     [SerializeField] private NoonActivity noonActivity;
     [SerializeField] private GameManager manager;
+    [SerializeField] private ParticleSystem particles;
 
     public void OnClick()
     {
@@ -50,6 +51,11 @@ public class WorkerSlot : MonoBehaviour
 
     public void CreateOrb(OrbType orb)
     {
-        Debug.Log($"{SlotID} {orb}");
+        var main = particles.main;
+        if (orb == OrbType.Mistakes)
+            main.startColor = Color.red;
+        else
+            main.startColor = Color.green;
+        particles.Play();
     }
 }

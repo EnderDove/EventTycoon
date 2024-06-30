@@ -58,6 +58,7 @@ public class EventOrganisationHandler : MonoBehaviour
             case 1: LocationWindow.SetActive(true); break;
             case 2: MoneySpreadWindow.SetActive(true); break;
             case 3: TimeSpreadWindow.SetActive(true); break;
+            case 4: StartCriticalManagement(); break;
             default: AllowFinish(); break;
         }
     }
@@ -143,6 +144,12 @@ public class EventOrganisationHandler : MonoBehaviour
         StartCoroutine(GenerateOrbs(2, 3, 4, 5));
     }
 
+    private void StartCriticalManagement()
+    {
+        StartCoroutine(FillProgress());
+        StartCoroutine(GenerateOrbs(6, 0, 0, 0));
+    }
+
     public void FinishGainingOrbs()
     {
         StopAllCoroutines();
@@ -165,11 +172,10 @@ public class EventOrganisationHandler : MonoBehaviour
 
         for (int i = 0; i < orbCnt; ++i)
         {
-            if (i < type1) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)1);
-            else if (i < type1 + type2) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)2);
-            else if (i < orbCnt - type4) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)3);
-            else if (i < orbCnt) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)4);
-
+            if (i < type1) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)0);
+            else if (i < type1 + type2) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)1);
+            else if (i < orbCnt - type4) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)2);
+            else if (i < orbCnt) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)3);
         }
         float prevOrbTime = 0;
         // here we spawn orbs and wait between different spawns
@@ -179,6 +185,26 @@ public class EventOrganisationHandler : MonoBehaviour
             prevOrbTime = entry.Key;
             var slot = availableWorkers[Random.Range(0, availableWorkersCount)];
             slot.CreateOrb(entry.Value);
+            switch (entry.Value)
+            {
+                case OrbType.Mistakes:
+                    if (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage == 4)
+                    {
+                        GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes -= 1;
+                        Mistakes.text = GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes.ToString();
+                        if (GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes == 0)
+                            FinishGainingOrbs();
+                    }
+                    else
+                    {
+                        GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes += 1;
+                        Mistakes.text = GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes.ToString();
+                    }
+                    break;
+                case OrbType.Appearence: GameInfo.Singleton.Save.CurrentEvent.CurrentAppearence += 1; Appearence.text = GameInfo.Singleton.Save.CurrentEvent.CurrentAppearence.ToString(); break;
+                case OrbType.Confidence: GameInfo.Singleton.Save.CurrentEvent.CurrentConfidence += 1; Confidence.text = GameInfo.Singleton.Save.CurrentEvent.CurrentConfidence.ToString(); break;
+                case OrbType.Technology: GameInfo.Singleton.Save.CurrentEvent.CurrentTechnology += 1; Technology.text = GameInfo.Singleton.Save.CurrentEvent.CurrentTechnology.ToString(); break;
+            }
             // instantiate orb and increase corresponding stat if it is not a type = 5
         }
     }
@@ -203,15 +229,16 @@ public class EventOrganisationHandler : MonoBehaviour
     {
         GameInfo.Singleton.Save.EventHitory.Add(GameInfo.Singleton.Save.CurrentEvent);
         GameInfo.Singleton.Save.CurrentEvent = null;
+        Debug.Log("Done");
     }
 }
 
 public enum OrbType
 {
+    Mistakes = 0,
     Appearence = 1,
-    Mistakes,
-    Technology,
-    Confidence
+    Technology = 2,
+    Confidence = 3,
 }
 
 [System.Serializable]

@@ -39,6 +39,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetTimeScale(float timeScale)
+    {
+        Time.timeScale = timeScale;
+    }
+
     public void SaveAndQuit()
     {
         saveLoadManager.SaveGame(GameInfo.Singleton.Save);

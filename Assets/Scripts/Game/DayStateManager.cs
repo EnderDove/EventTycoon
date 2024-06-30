@@ -22,7 +22,6 @@ public class DayStateManager : MonoBehaviour
         if (GameInfo.Singleton.Save.Day == 1 && GameInfo.Singleton.Save.CurrentState == DayState.Morning)
         {  // if game just started we give player new worker
             GameInfo.Singleton.Save.Workers[0] = Employee.ToWorkerData(BasicEmployee);
-            GameInfo.Singleton.Save.Workers[1] = Employee.ToWorkerData(BasicEmployee);
         }
 
         if (GameInfo.Singleton.Save.CurrentState == DayState.Morning)
