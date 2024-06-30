@@ -59,7 +59,7 @@ public class ScoreCalculator
     public static void Calculate(GameEvent gameEvent)
     {
         var coefficient = 1f;
-        coefficient *= TypeThemeTable[Types[gameEvent.Type], Themes[gameEvent.Threme]];
+        coefficient *= TypeThemeTable[Themes[gameEvent.Threme], Types[gameEvent.Type]];
         coefficient *= LocationTable[gameEvent.Location];
         coefficient *= CalculateMoney(gameEvent.MoneySpendedOn);
         coefficient *= UnityEngine.Random.Range(1f, 2f);

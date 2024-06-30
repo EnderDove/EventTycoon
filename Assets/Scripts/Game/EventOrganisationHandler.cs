@@ -15,7 +15,10 @@ public class EventOrganisationHandler : MonoBehaviour
 
     [SerializeField] private Image ProgressBar;
     [SerializeField] private float BarFillDurationSec = 15;
-    [SerializeField] private GameObject score;
+    [SerializeField] private GameObject Score;
+
+    public Button Continue;
+    [SerializeField] private List<MoneyWaste> Locations;
 
     [SerializeField] private TMP_InputField NameField;
     [SerializeField] private List<MoneyWaste> MoneyWastes;
@@ -46,9 +49,11 @@ public class EventOrganisationHandler : MonoBehaviour
         }
         if (GameInfo.Singleton.Save.CurrentEvent != null)
         {
-            score.SetActive(true);
+            Score.SetActive(true);
             SyncPoints();
         }
+
+        Continue.onClick.AddListener(OpenChooseWindow);
     }
 
     public void AllowFinish()
@@ -60,12 +65,13 @@ public class EventOrganisationHandler : MonoBehaviour
     {
         switch (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage)
         {
-            case 1: LocationWindow.SetActive(true); break;
+            case 1: CheckLocations(); LocationWindow.SetActive(true); break;
             case 2: MoneySpreadWindow.SetActive(true); break;
             case 3: TimeSpreadWindow.SetActive(true); break;
             case 4: StartCriticalManagement(); break;
             default: AllowFinish(); break;
         }
+        Continue.gameObject.SetActive(false);
     }
 
     public void StartOrganising()
@@ -96,31 +102,48 @@ public class EventOrganisationHandler : MonoBehaviour
 
         _type = type;
     }
-    public void ChooseLocation(string location)
+    private void CheckLocations()
     {
-        GameInfo.Singleton.Save.CurrentEvent.Location = location;
-        EndChoosing();
-
+        for (int i = 0; i < Locations.Count; i++)
+        {
+            if (Locations[i].Cost > GameInfo.Singleton.Save.Money + 50_000)
+            {
+                Locations[i].GetComponent<Button>().enabled = false;
+            }
+        }
     }
+    public void ChooseLocation(MoneyWaste waste)
+    {
+        GameInfo.Singleton.Save.CurrentEvent.Location = waste.Name;
+        Debug.Log("AAAAAa");
+        EndChoosing();
+        manager.SubtractMoney(waste.Cost);
+    }
+
     private void CheckMoneySpendingSum()
     {
         float sum = 0;
-        float maxSum = 50000;
         foreach (var moneyWaste in MoneyWastes)
         {
             if (moneyWaste.IsOn)
                 sum += moneyWaste.Cost;
         }
-        MoneySum.text = $"Итоговая Сумма {sum}/{maxSum}";
-        if (sum > maxSum)
+        MoneySum.text = $"Итоговая Сумма {sum}";
+        if (sum > GameInfo.Singleton.Save.Money)
         {
-            AcceptMoneyButton.enabled = false;
             MoneySum.color = Color.red;
         }
         else
         {
-            AcceptMoneyButton.enabled = true;
             MoneySum.color = Color.black;
+        }
+        if (sum > GameInfo.Singleton.Save.Money + 50_000)
+        {
+            AcceptMoneyButton.enabled = false;
+        }
+        else
+        {
+            AcceptMoneyButton.enabled = true;
         }
     }
     public void SpendMoney()
@@ -154,6 +177,7 @@ public class EventOrganisationHandler : MonoBehaviour
 
     private void EndChoosing()
     {
+        Continue.gameObject.SetActive(false);
         StartCoroutine(FillProgress());
         StartCoroutine(GenerateOrbs(Random.Range(0, 4), Random.Range(2, 6), Random.Range(2, 6), Random.Range(2, 6)));
     }
@@ -198,15 +222,17 @@ public class EventOrganisationHandler : MonoBehaviour
             yield return new WaitForSeconds(entry.Key - prevOrbTime);
             prevOrbTime = entry.Key;
             var slot = availableWorkers[Random.Range(0, availableWorkersCount)];
-            slot.CreateOrb(entry.Value);
             switch (entry.Value)
             {
                 case OrbType.Mistakes:
                     if (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage == 4)
                     {
-                        GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes -= 1;
                         if (GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes == 0)
+                        {
                             FinishGainingOrbs();
+                            yield break;
+                        }
+                        GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes -= 1;
                     }
                     else
                     {
@@ -217,6 +243,7 @@ public class EventOrganisationHandler : MonoBehaviour
                 case OrbType.Confidence: GameInfo.Singleton.Save.CurrentEvent.CurrentConfidence += 1; break;
                 case OrbType.Technology: GameInfo.Singleton.Save.CurrentEvent.CurrentTechnology += 1; break;
             }
+            slot.CreateOrb(entry.Value);
             SyncPoints();
             // instantiate orb and increase corresponding stat if it is not a type = 5
         }

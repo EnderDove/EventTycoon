@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 // class that process actions in Game scene
@@ -7,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public WorkerSlot[] WorkerSlots { get; private set; }
     [SerializeField] private List<Employee> allEmployees;
+    [SerializeField] private TMP_Text money;
 
     private DayStateManager _dayManager;
     private SceneChanger sceneChanger;
@@ -37,6 +39,13 @@ public class GameManager : MonoBehaviour
         {
             WorkerSlots[slot.SlotID] = slot;
         }
+        money.text = $"{GameInfo.Singleton.Save.Money} руб";
+    }
+
+    public void SubtractMoney(int number)
+    {
+        GameInfo.Singleton.Save.Money -= number;
+        money.text = $"{GameInfo.Singleton.Save.Money} руб";
     }
 
     public void SetTimeScale(float timeScale)
