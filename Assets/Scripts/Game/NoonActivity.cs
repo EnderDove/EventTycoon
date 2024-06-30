@@ -4,6 +4,7 @@ public class NoonActivity : DayBaseState
 {
     private WorkerSlot selectedWarker;
     [SerializeField] private EventOrganisationHandler handler;
+    [SerializeField] private GameObject CritManag;
 
     public override void EnterState(DayStateManager day)
     {
@@ -11,7 +12,12 @@ public class NoonActivity : DayBaseState
         if (GameInfo.Singleton.Save.CurrentEvent != null)
         {
             handler.OpenChooseWindow();
+            if (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage == 4)
+                CritManag.SetActive(true);
+            else
+                CritManag.SetActive(false);
         }
+
 
     }
 

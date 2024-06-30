@@ -19,7 +19,7 @@ public class PlayWindow : MonoBehaviour
     {
         sceneChanger = GetComponent<SceneChanger>();
 
-        checkmark.color = Color.green;
+        checkmark.gameObject.SetActive(true);
         useTutorial = true;
 
         string[] saves = saveLoadManager.GetSaves();
@@ -53,9 +53,10 @@ public class PlayWindow : MonoBehaviour
     {
         useTutorial = !useTutorial;
         if (useTutorial)
-            checkmark.color = Color.green;
+            checkmark.gameObject.SetActive(true);
         else
-            checkmark.color = Color.gray;
+            checkmark.gameObject.SetActive(false);
+
     }
 
 

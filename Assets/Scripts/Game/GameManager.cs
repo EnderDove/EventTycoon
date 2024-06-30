@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public WorkerSlot[] WorkerSlots { get; private set; }
     [SerializeField] private List<Employee> allEmployees;
     [SerializeField] private TMP_Text money;
+    [SerializeField] private List<GameObject> Tutors;
 
     private DayStateManager _dayManager;
     private SceneChanger sceneChanger;
@@ -40,6 +41,19 @@ public class GameManager : MonoBehaviour
             WorkerSlots[slot.SlotID] = slot;
         }
         money.text = $"{GameInfo.Singleton.Save.Money} руб";
+
+        if (!GameInfo.Singleton.UseTutorial)
+        {
+            CloseTutorials();
+        }
+    }
+
+    public void CloseTutorials()
+    {
+        for (int i = 0; i < Tutors.Count; i++)
+        {
+            Tutors[i].SetActive(false);
+        }
     }
 
     public void SubtractMoney(int number)

@@ -18,6 +18,7 @@ public class EventOrganisationHandler : MonoBehaviour
     [SerializeField] private GameObject Score;
 
     public Button Continue;
+    [SerializeField] GameObject SkipDay;
     [SerializeField] private List<MoneyWaste> Locations;
 
     [SerializeField] private TMP_InputField NameField;
@@ -52,17 +53,19 @@ public class EventOrganisationHandler : MonoBehaviour
             Score.SetActive(true);
             SyncPoints();
         }
-
+        ProgressBar.fillAmount = GameInfo.Singleton.Save.CurrentEvent.DevelopingStage / 5f;
         Continue.onClick.AddListener(OpenChooseWindow);
     }
 
     public void AllowFinish()
     {
         FinishButton.gameObject.SetActive(true);
+        SkipDay.SetActive(true);
     }
 
     public void OpenChooseWindow()
     {
+        SkipDay.SetActive(false);
         switch (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage)
         {
             case 1: CheckLocations(); LocationWindow.SetActive(true); break;
@@ -108,7 +111,7 @@ public class EventOrganisationHandler : MonoBehaviour
         {
             if (Locations[i].Cost > GameInfo.Singleton.Save.Money + 50_000)
             {
-                Locations[i].GetComponent<Button>().enabled = false;
+                Locations[i].GetComponent<Button>().interactable = false;
             }
         }
     }
@@ -177,6 +180,7 @@ public class EventOrganisationHandler : MonoBehaviour
 
     private void EndChoosing()
     {
+        SkipDay.SetActive(true);
         Continue.gameObject.SetActive(false);
         StartCoroutine(FillProgress());
         StartCoroutine(GenerateOrbs(Random.Range(0, 4), Random.Range(2, 6), Random.Range(2, 6), Random.Range(2, 6)));
@@ -184,6 +188,7 @@ public class EventOrganisationHandler : MonoBehaviour
 
     private void StartCriticalManagement()
     {
+        SkipDay.SetActive(true);
         StartCoroutine(FillProgress());
         StartCoroutine(GenerateOrbs(Random.Range(6, 13), 0, 0, 0));
     }
@@ -219,6 +224,11 @@ public class EventOrganisationHandler : MonoBehaviour
         // here we spawn orbs and wait between different spawns
         foreach (var entry in timeToType)
         {
+            if (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage == 4 && GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes == 0)
+            {
+                FinishGainingOrbs();
+                yield break;
+            }
             yield return new WaitForSeconds(entry.Key - prevOrbTime);
             prevOrbTime = entry.Key;
             var slot = availableWorkers[Random.Range(0, availableWorkersCount)];
@@ -227,12 +237,12 @@ public class EventOrganisationHandler : MonoBehaviour
                 case OrbType.Mistakes:
                     if (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage == 4)
                     {
+                        GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes -= 1;
                         if (GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes == 0)
                         {
                             FinishGainingOrbs();
                             yield break;
                         }
-                        GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes -= 1;
                     }
                     else
                     {
@@ -245,6 +255,7 @@ public class EventOrganisationHandler : MonoBehaviour
             }
             slot.CreateOrb(entry.Value);
             SyncPoints();
+
             // instantiate orb and increase corresponding stat if it is not a type = 5
         }
     }
@@ -266,6 +277,10 @@ public class EventOrganisationHandler : MonoBehaviour
 
     public void Finish()
     {
+        if (GameInfo.Singleton.UseTutorial)
+        {
+            manager.CloseTutorials();
+        }
         ScoreCalculator.Calculate(GameInfo.Singleton.Save.CurrentEvent);
         Debug.Log(GameInfo.Singleton.Save.CurrentEvent.FinalMultiplayer);
         GameInfo.Singleton.Save.EventHitory.Add(GameInfo.Singleton.Save.CurrentEvent);
