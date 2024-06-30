@@ -729,6 +729,7 @@ MonoBehaviour:
   Technology: {fileID: 0}
   Confidence: {fileID: 0}
   ProgressBar: {fileID: 0}
+  BarFillDurationSec: 15
   NameField: {fileID: 0}
   MoneyWastes: []
   MoneySum: {fileID: 0}
@@ -4655,7 +4656,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4890,7 +4891,6 @@ MonoBehaviour:
   NewsWindow: {fileID: 8655500046537061818}
   Morning: {fileID: 0}
   Noon: {fileID: 0}
-  Evening: {fileID: 0}
   BasicEmployee: {fileID: 11400000, guid: 53fba2dee12b0bc4ea1c7d5bfd9927d2, type: 2}
 --- !u!114 &453980876
 MonoBehaviour:
@@ -4959,6 +4959,7 @@ MonoBehaviour:
   Technology: {fileID: 895463457}
   Confidence: {fileID: 980037062}
   ProgressBar: {fileID: 993754830}
+  BarFillDurationSec: 3
   NameField: {fileID: 367562096}
   MoneyWastes:
   - {fileID: 1107683614}

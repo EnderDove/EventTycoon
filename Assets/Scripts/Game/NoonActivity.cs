@@ -20,10 +20,8 @@ public class NoonActivity : DayBaseState
     }
     public override void NextState(DayStateManager day)
     {
-        Debug.Log("Ending Day");
-        GameInfo.Singleton.Save.CurrentState = DayState.Evening;
+        Debug.Log("Ending Day here should be smth instead of evening");
         UpdateWorkers();
-        day.SwitchActivity(day.Evening);
     }
 
     public bool CanOrganize()

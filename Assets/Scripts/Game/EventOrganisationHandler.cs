@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,10 @@ public class EventOrganisationHandler : MonoBehaviour
     [SerializeField] private TMP_Text Mistakes;
     [SerializeField] private TMP_Text Technology;
     [SerializeField] private TMP_Text Confidence;
+
     [SerializeField] private Image ProgressBar;
+    [SerializeField] private float BarFillDurationSec = 15;
+    //private float BarFillSpeed = 
 
     [SerializeField] private TMP_InputField NameField;
     [SerializeField] private List<MoneyWaste> MoneyWastes;
@@ -134,11 +138,69 @@ public class EventOrganisationHandler : MonoBehaviour
         }
         EndChoosing();
     }
+
+    enum OrbType
+    {
+        Appearence = 1,
+        Mistakes,
+        Technology,
+        Confidence
+    }
+
+    // change method name to "animate bar"
     private void EndChoosing()
     {
-        GameInfo.Singleton.Save.CurrentEvent.DevelopingStage += 1;
-        ProgressBar.fillAmount = GameInfo.Singleton.Save.CurrentEvent.DevelopingStage / 4f;
+        
+        //ProgressBar.fillAmount = GameInfo.Singleton.Save.CurrentEvent.DevelopingStage / 4f;
+
+        StartCoroutine(FillProgress(ProgressBar));
+        StartCoroutine(GenerateOrbs(2, 3, 4, 5));
     }
+
+    private IEnumerator GenerateOrbs(int type1, int type2, int type3, int type4)
+    {
+        int orbCnt = type1 + type2 + type3 + type4;
+        // here we create all the orbs in random times between begin and end of filling
+        var timeToType = new SortedDictionary<float, OrbType>();
+        //timeToType.Add(0, (OrbType)5); // fictionary record to help processing real ones
+
+        for (int i = 0;i<orbCnt;++i)
+        {
+            if (i < type1) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)1);
+            else if (i < type1+type2) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)2);
+            else if (i < orbCnt-type4) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)3);
+            else if (i < orbCnt) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)4);
+            
+        }
+        float prevOrbTime = 0;
+        // here we spawn orbs and wait between different spawns
+        foreach (var entry in timeToType) {
+            yield return new WaitForSeconds(entry.Key - prevOrbTime);
+            prevOrbTime = entry.Key;
+            Debug.Log($"spawned new orb by type {entry.Value}");
+            // instantiate orb and increase corresponding stat if it is not a type = 5
+        }
+    }
+
+    
+
+    private IEnumerator FillProgress(Image bar)
+    {
+        // when stopping event we should deactivate bar?
+        if (bar == null) yield break;
+
+        // what to do when bar is filled??
+        float timeSpend = 0;
+        while (timeSpend <= BarFillDurationSec) {
+            bar.fillAmount = timeSpend/BarFillDurationSec;
+            GameInfo.Singleton.Save.CurrentEvent.DevelopingStage = timeSpend / BarFillDurationSec;
+            timeSpend += Time.deltaTime;
+            yield return null;
+        }
+
+    }
+
+
     public void Finish()
     {
         GameInfo.Singleton.Save.EventHitory.Add(GameInfo.Singleton.Save.CurrentEvent);
@@ -156,7 +218,8 @@ public class Event
     public string Location = "";
     public bool[] MoneySpendedOn;
     public float[] TimeSpendedOn;
-    public int DevelopingStage = 0;
+    // value of stage from 0 to 1
+    public float DevelopingStage = 0f;
     public float FinalMultiplayer = 1f;
 
     public int CurrentAppearence = 0;
