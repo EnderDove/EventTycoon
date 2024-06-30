@@ -53,10 +53,10 @@ public class Save
     public string SaveName = "Default Company";
     public int Day = 1;
     public DayState CurrentState = DayState.Morning;
-    public int Money = 10000;
+    public int Money = 50000;
     public WorkerData[] Workers = new WorkerData[12];
-    public Event CurrentEvent;
-    public List<Event> EventHitory = new();
+    public GameEvent CurrentEvent;
+    public List<GameEvent> EventHitory = new();
 }
 
 public enum DayState

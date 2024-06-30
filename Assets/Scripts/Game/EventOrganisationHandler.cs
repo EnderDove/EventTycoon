@@ -72,10 +72,10 @@ public class EventOrganisationHandler : MonoBehaviour
     {
         //Calculate Multip.
 
-        GameInfo.Singleton.Save.CurrentEvent = new Event() { Name = NameField.text, Type = _type, Threme = _thereme };
+        GameInfo.Singleton.Save.CurrentEvent = new GameEvent() { Name = NameField.text, Type = _type, Threme = _thereme };
         FinishButton.gameObject.SetActive(false);
         SyncPoints();
-        EndChoosing(Random.Range(1, 2), Random.Range(3, 6), Random.Range(3, 6), Random.Range(3, 6));
+        EndChoosing();
     }
     private void SyncPoints()
     {
@@ -98,16 +98,14 @@ public class EventOrganisationHandler : MonoBehaviour
     }
     public void ChooseLocation(string location)
     {
-        //Calculate Multip.
-
         GameInfo.Singleton.Save.CurrentEvent.Location = location;
-        EndChoosing(Random.Range(1, 2), Random.Range(3, 6), Random.Range(3, 6), Random.Range(3, 6));
+        EndChoosing();
 
     }
     private void CheckMoneySpendingSum()
     {
         float sum = 0;
-        float maxSum = 100;
+        float maxSum = 50000;
         foreach (var moneyWaste in MoneyWastes)
         {
             if (moneyWaste.IsOn)
@@ -130,7 +128,7 @@ public class EventOrganisationHandler : MonoBehaviour
         GameInfo.Singleton.Save.CurrentEvent.MoneySpendedOn = new bool[MoneyWastes.Count];
         for (int i = 0; i < MoneyWastes.Count; i++)
             GameInfo.Singleton.Save.CurrentEvent.MoneySpendedOn[i] = MoneyWastes[i].IsOn;
-        EndChoosing(Random.Range(1, 2), Random.Range(3, 6), Random.Range(3, 6), Random.Range(3, 6));
+        EndChoosing();
     }
     private void RecalculateSlidersValues()
     {
@@ -150,20 +148,20 @@ public class EventOrganisationHandler : MonoBehaviour
         {
             GameInfo.Singleton.Save.CurrentEvent.TimeSpendedOn[i] = TimeSliders[i].value / sum;
         }
-        EndChoosing(Random.Range(1, 2), Random.Range(3, 6), Random.Range(3, 6), Random.Range(3, 6));
+        EndChoosing();
 
     }
 
-    private void EndChoosing(int mistakes, int appearence, int confidence, int technology)
+    private void EndChoosing()
     {
         StartCoroutine(FillProgress());
-        StartCoroutine(GenerateOrbs(mistakes, appearence, confidence, technology));
+        StartCoroutine(GenerateOrbs(Random.Range(0, 4), Random.Range(2, 6), Random.Range(2, 6), Random.Range(2, 6)));
     }
 
     private void StartCriticalManagement()
     {
         StartCoroutine(FillProgress());
-        StartCoroutine(GenerateOrbs(6, 0, 0, 0));
+        StartCoroutine(GenerateOrbs(Random.Range(6, 13), 0, 0, 0));
     }
 
     public void FinishGainingOrbs()
@@ -188,10 +186,10 @@ public class EventOrganisationHandler : MonoBehaviour
 
         for (int i = 0; i < orbCnt; ++i)
         {
-            if (i < type1) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)0);
-            else if (i < type1 + type2) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)1);
-            else if (i < orbCnt - type4) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)2);
-            else if (i < orbCnt) timeToType.Add(Random.Range(0, BarFillDurationSec), (OrbType)3);
+            if (i < type1) timeToType.Add(Random.Range(0, BarFillDurationSec), OrbType.Mistakes);
+            else if (i < type1 + type2) timeToType.Add(Random.Range(0, BarFillDurationSec), OrbType.Appearence);
+            else if (i < orbCnt - type4) timeToType.Add(Random.Range(0, BarFillDurationSec), OrbType.Technology);
+            else if (i < orbCnt) timeToType.Add(Random.Range(0, BarFillDurationSec), OrbType.Confidence);
         }
         float prevOrbTime = 0;
         // here we spawn orbs and wait between different spawns
@@ -239,12 +237,12 @@ public class EventOrganisationHandler : MonoBehaviour
         }
     }
 
-
     public void Finish()
     {
+        ScoreCalculator.Calculate(GameInfo.Singleton.Save.CurrentEvent);
+        Debug.Log(GameInfo.Singleton.Save.CurrentEvent.FinalMultiplayer);
         GameInfo.Singleton.Save.EventHitory.Add(GameInfo.Singleton.Save.CurrentEvent);
         GameInfo.Singleton.Save.CurrentEvent = null;
-        Debug.Log("Done");
     }
 }
 
@@ -257,7 +255,7 @@ public enum OrbType
 }
 
 [System.Serializable]
-public class Event
+public class GameEvent
 {
     public string Name = "Базовое Мероприятие";
     public string Type = "";
