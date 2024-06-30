@@ -56,7 +56,7 @@ public class Save
     public int Money = 10000;
     public WorkerData[] Workers = new WorkerData[12];
     public Event CurrentEvent;
-    public List<Event> EventStory = new();
+    public List<Event> EventHitory = new();
 }
 
 public enum DayState
