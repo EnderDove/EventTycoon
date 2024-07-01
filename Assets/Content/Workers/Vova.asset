@@ -12,5 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d91321f1c79e0a7459f9c1f8ca486a40, type: 3}
   m_Name: Vova
   m_EditorClassIdentifier: 
-  Name: Vova Shubkin
-  BasicExperience: 1000000
+  EmployeeID: 0
+  Name: "\u0418\u043B\u044C\u044F \u0411\u043E\u0440\u0438\u0441\u043E\u0432"
+  ProfilePicture: {fileID: 0}
+  SpriteLD: {fileID: 0}
+  SpriteRD: {fileID: 0}
+  SpriteLU: {fileID: 0}
+  SpriteRU: {fileID: 0}
+  BasicDisignSkills: 0
+  BasicSpeed: 0
+  BasicCommunicationSkills: 0
+  Cost: 0

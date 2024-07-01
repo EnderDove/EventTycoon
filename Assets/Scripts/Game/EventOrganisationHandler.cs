@@ -287,6 +287,7 @@ public class EventOrganisationHandler : MonoBehaviour
     {
         if (GameInfo.Singleton.UseTutorial)
         {
+            GameInfo.Singleton.UseTutorial = false;
             manager.CloseTutorials();
         }
         ScoreCalculator.Calculate(GameInfo.Singleton.Save.CurrentEvent);

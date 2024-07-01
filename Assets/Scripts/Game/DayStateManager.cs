@@ -29,6 +29,7 @@ public class DayStateManager : MonoBehaviour
         else if (GameInfo.Singleton.Save.CurrentState == DayState.Noon)
             _dayState = Noon;
 
+        currentDay.text = $"{GameInfo.Singleton.Save.Day} день";
         _dayState.EnterState(this);
     }
 
