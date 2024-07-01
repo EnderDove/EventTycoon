@@ -39,13 +39,13 @@ public class ScoreCalculator
     public static Dictionary<string, float> LocationTable = new()
     {
         {"Конференц-центр", 2f},
-        {"Учебный центр", 1.65f},
-        {"Библиотека", 1.5f},
-        {"Коворкинг", 1.25f},
+        {"Учебный центр", 1.15f},
+        {"Библиотека", 1.3f},
+        {"Коворкинг", 1.5f},
         {"Открытые площадки", 1.75f},
     };
 
-    public static float[] MoneyTable = { 0.25f, 0.15f, 0.4f, 0.2f };
+    public static float[] MoneyTable = { 0.4f, 0.15f, 0.25f, 0.2f };
 
     private static float CalculateMoney(bool[] moneySpendOn)
     {
@@ -58,7 +58,7 @@ public class ScoreCalculator
 
     public static void Calculate(GameEvent gameEvent)
     {
-        var coefficient = 1f;
+        var coefficient = 50f;
         coefficient *= TypeThemeTable[Themes[gameEvent.Threme], Types[gameEvent.Type]];
         coefficient *= LocationTable[gameEvent.Location];
         coefficient *= CalculateMoney(gameEvent.MoneySpendedOn);

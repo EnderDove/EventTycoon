@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 // class that process actions in Game scene
 [RequireComponent(typeof(SceneChanger))]
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Employee> allEmployees;
     [SerializeField] private TMP_Text money;
     [SerializeField] private List<GameObject> Tutors;
+    [SerializeField] private Image score;
     private readonly List<MoneyGainer> moneyGainers = new();
 
     private DayStateManager _dayManager;
@@ -61,7 +63,7 @@ public class GameManager : MonoBehaviour
     {
         GameInfo.Singleton.Save.Money -= number;
         money.text = $"{GameInfo.Singleton.Save.Money} руб";
-        if (GameInfo.Singleton.Save.Money <= 50_000)
+        if (GameInfo.Singleton.Save.Money < -50_000)
         {
             saveLoadManager.DeleteGame(GameInfo.Singleton.Save.SaveName);
             sceneChanger.LoadScene("Main Menu");
@@ -93,6 +95,8 @@ public class GameManager : MonoBehaviour
 
     public void EndGainingMoney(MoneyGainer moneyGainer)
     {
+        score.fillAmount = (moneyGainer.finalMultiplayer - 50) / 530;
+        score.transform.parent.gameObject.SetActive(true);
         moneyGainers.Remove(moneyGainer);
         Destroy(moneyGainer.gameObject);
     }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class MoneyGainer : MonoBehaviour
 {
     private int day = 0;
-    private float finalMultiplayer;
+    public float finalMultiplayer;
     public GameManager gameManager;
 
     public int GainMoney()
@@ -15,9 +15,9 @@ public class MoneyGainer : MonoBehaviour
         }
         int money;
         if (day < 5)
-            money = Mathf.FloorToInt(finalMultiplayer * (day - 5) * (day - 5) * 500);
+            money = Mathf.FloorToInt(finalMultiplayer * (day - 5) * (day - 5) * 5);
         else
-            money = Mathf.FloorToInt(finalMultiplayer * (day - 4) * (day - 4) * 500);
+            money = Mathf.FloorToInt(finalMultiplayer * (day - 4) * (day - 4) * 5);
         day += 1;
         return money;
     }
