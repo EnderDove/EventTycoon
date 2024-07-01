@@ -110,15 +110,15 @@ public class EventOrganisationHandler : MonoBehaviour
         for (int i = 0; i < Locations.Count; i++)
         {
             if (Locations[i].Cost > GameInfo.Singleton.Save.Money + 50_000)
-            {
                 Locations[i].GetComponent<Button>().interactable = false;
-            }
+            else
+                Locations[i].GetComponent<Button>().interactable = true;
+
         }
     }
     public void ChooseLocation(MoneyWaste waste)
     {
         GameInfo.Singleton.Save.CurrentEvent.Location = waste.Name;
-        Debug.Log("AAAAAa");
         EndChoosing();
         manager.SubtractMoney(waste.Cost);
     }
@@ -152,8 +152,14 @@ public class EventOrganisationHandler : MonoBehaviour
     public void SpendMoney()
     {
         GameInfo.Singleton.Save.CurrentEvent.MoneySpendedOn = new bool[MoneyWastes.Count];
+        int sum = 0;
         for (int i = 0; i < MoneyWastes.Count; i++)
+        {
             GameInfo.Singleton.Save.CurrentEvent.MoneySpendedOn[i] = MoneyWastes[i].IsOn;
+            if (MoneyWastes[i].IsOn)
+                sum += MoneyWastes[i].Cost;
+        }
+        manager.SubtractMoney(sum);
         EndChoosing();
     }
     private void RecalculateSlidersValues()
@@ -227,7 +233,6 @@ public class EventOrganisationHandler : MonoBehaviour
             if (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage == 4 && GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes == 0)
             {
                 FinishGainingOrbs();
-                yield break;
             }
             yield return new WaitForSeconds(entry.Key - prevOrbTime);
             prevOrbTime = entry.Key;
@@ -241,7 +246,6 @@ public class EventOrganisationHandler : MonoBehaviour
                         if (GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes == 0)
                         {
                             FinishGainingOrbs();
-                            yield break;
                         }
                     }
                     else
@@ -255,6 +259,10 @@ public class EventOrganisationHandler : MonoBehaviour
             }
             slot.CreateOrb(entry.Value);
             SyncPoints();
+            if (GameInfo.Singleton.Save.CurrentEvent.DevelopingStage == 4 && GameInfo.Singleton.Save.CurrentEvent.CurrentMistakes == 0)
+            {
+                yield break;
+            }
 
             // instantiate orb and increase corresponding stat if it is not a type = 5
         }

@@ -8,7 +8,6 @@ public class NoonActivity : DayBaseState
 
     public override void EnterState(DayStateManager day)
     {
-        Debug.Log("Starting " + GameInfo.Singleton.Save.Day);
         if (GameInfo.Singleton.Save.CurrentEvent != null)
         {
             handler.OpenChooseWindow();
@@ -23,7 +22,6 @@ public class NoonActivity : DayBaseState
 
     public override void NextState(DayStateManager day)
     {
-        Debug.Log("Ending Day");
         GameInfo.Singleton.Save.CurrentState = DayState.Morning;
         GameInfo.Singleton.Save.Day += 1;
         day.gameManager.UpdateGainers();
@@ -32,6 +30,11 @@ public class NoonActivity : DayBaseState
             handler.FinishGainingOrbs();
         }
         UpdateWorkers();
+
+        if (GameInfo.Singleton.Save.Day % 14 == 0)
+        {
+            day.gameManager.SubtractMoney(37_000);
+        }
         day.gameManager.Save();
         day.SwitchActivity(day.Morning);
     }

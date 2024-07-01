@@ -9,7 +9,10 @@ public class MoneyGainer : MonoBehaviour
     public int GainMoney()
     {
         if (day == 10)
-            gameManager.EndGainingMoney(this);
+        {
+            Invoke(nameof(Stop), 0.01f);
+            return 0;
+        }
         int money;
         if (day < 5)
             money = Mathf.FloorToInt(finalMultiplayer * (day - 5) * (day - 5) * 500);
@@ -19,8 +22,15 @@ public class MoneyGainer : MonoBehaviour
         return money;
     }
 
+    private void Stop()
+    {
+        gameManager.EndGainingMoney(this);
+    }
+
     public void StartGaining(GameEvent gameEvent)
     {
+        Debug.Log(gameEvent.Name);
+        Debug.Log(gameEvent.FinalMultiplayer);
         finalMultiplayer = gameEvent.FinalMultiplayer;
     }
 }

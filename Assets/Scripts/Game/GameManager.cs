@@ -61,6 +61,11 @@ public class GameManager : MonoBehaviour
     {
         GameInfo.Singleton.Save.Money -= number;
         money.text = $"{GameInfo.Singleton.Save.Money} руб";
+        if (GameInfo.Singleton.Save.Money <= 50_000)
+        {
+            saveLoadManager.DeleteGame(GameInfo.Singleton.Save.SaveName);
+            sceneChanger.LoadScene("Main Menu");
+        }
     }
 
     public void SetTimeScale(float timeScale)
@@ -72,6 +77,7 @@ public class GameManager : MonoBehaviour
     {
         MoneyGainer moneyGainer = new GameObject().AddComponent<MoneyGainer>();
         moneyGainer.gameManager = this;
+        moneyGainer.StartGaining(gameEvent);
         moneyGainers.Add(moneyGainer);
     }
 
