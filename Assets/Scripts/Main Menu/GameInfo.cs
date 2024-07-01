@@ -57,6 +57,9 @@ public class Save
     public WorkerData[] Workers = new WorkerData[12];
     public GameEvent CurrentEvent;
     public List<GameEvent> EventHitory = new();
+    public float DesignSkills;
+    public float Speed;
+    public float CommunicationSkills;
 }
 
 public enum DayState

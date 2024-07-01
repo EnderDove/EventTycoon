@@ -26,6 +26,7 @@ public class NoonActivity : DayBaseState
         Debug.Log("Ending Day");
         GameInfo.Singleton.Save.CurrentState = DayState.Morning;
         GameInfo.Singleton.Save.Day += 1;
+        day.gameManager.UpdateGainers();
         if (GameInfo.Singleton.Save.CurrentEvent != null)
         {
             handler.FinishGainingOrbs();
@@ -78,7 +79,9 @@ public class NoonActivity : DayBaseState
                 continue;
             if (worker.IsLearning)
             {
-                worker.CommunicationSkills += 10; //example
+                GameInfo.Singleton.Save.Speed += Random.Range(0, 6);
+                GameInfo.Singleton.Save.CommunicationSkills += Random.Range(0, 6);
+                GameInfo.Singleton.Save.DesignSkills += Random.Range(0, 6);
             }
         }
     }

@@ -18,6 +18,6 @@ public class Employee : ScriptableObject
 
     public static WorkerData ToWorkerData(Employee employee)
     {
-        return new WorkerData() { EmployeeIDRef = employee.EmployeeID, CommunicationSkills = employee.BasicCommunicationSkills, DisignSkills = employee.BasicDisignSkills, Speed = employee.BasicSpeed };
+        return new WorkerData() { EmployeeIDRef = employee.EmployeeID };
     }
 }

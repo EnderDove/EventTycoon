@@ -51,9 +51,9 @@ public class EventOrganisationHandler : MonoBehaviour
         if (GameInfo.Singleton.Save.CurrentEvent != null)
         {
             Score.SetActive(true);
+            ProgressBar.fillAmount = GameInfo.Singleton.Save.CurrentEvent.DevelopingStage / 5f;
             SyncPoints();
         }
-        ProgressBar.fillAmount = GameInfo.Singleton.Save.CurrentEvent.DevelopingStage / 5f;
         Continue.onClick.AddListener(OpenChooseWindow);
     }
 
@@ -284,6 +284,7 @@ public class EventOrganisationHandler : MonoBehaviour
         ScoreCalculator.Calculate(GameInfo.Singleton.Save.CurrentEvent);
         Debug.Log(GameInfo.Singleton.Save.CurrentEvent.FinalMultiplayer);
         GameInfo.Singleton.Save.EventHitory.Add(GameInfo.Singleton.Save.CurrentEvent);
+        manager.StartGainingMoney(GameInfo.Singleton.Save.CurrentEvent);
         GameInfo.Singleton.Save.CurrentEvent = null;
     }
 }

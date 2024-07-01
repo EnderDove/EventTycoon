@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Employee> allEmployees;
     [SerializeField] private TMP_Text money;
     [SerializeField] private List<GameObject> Tutors;
+    private readonly List<MoneyGainer> moneyGainers = new();
 
     private DayStateManager _dayManager;
     private SceneChanger sceneChanger;
@@ -65,6 +66,29 @@ public class GameManager : MonoBehaviour
     public void SetTimeScale(float timeScale)
     {
         Time.timeScale = timeScale;
+    }
+
+    public void StartGainingMoney(GameEvent gameEvent)
+    {
+        MoneyGainer moneyGainer = new GameObject().AddComponent<MoneyGainer>();
+        moneyGainer.gameManager = this;
+        moneyGainers.Add(moneyGainer);
+    }
+
+    public void UpdateGainers()
+    {
+        foreach (var moneyGainer in moneyGainers)
+        {
+            GameInfo.Singleton.Save.Money += moneyGainer.GainMoney();
+            money.text = $"{GameInfo.Singleton.Save.Money} руб";
+        }
+
+    }
+
+    public void EndGainingMoney(MoneyGainer moneyGainer)
+    {
+        moneyGainers.Remove(moneyGainer);
+        Destroy(moneyGainer.gameObject);
     }
 
     public void Save()
